@@ -1,0 +1,42 @@
+# Example of type:cast:type
+@include <wizardry>
+
+struct mystruct {
+    int type;
+    u8 flags;
+    int data;
+}
+
+enum {
+    TYPE_NONE;
+    TYPE_1;
+    TYPE_2;
+}
+
+enum (1 <<) {
+    BITFLAG_1;
+    BITFLAG_2;
+    BITFLAG_3;
+}
+
+struct(mystruct):cast:bool (val) {
+    return val.type != TYPE_NONE;
+}
+
+void pstatus(struct(mystruct)$ input) {
+    if (input$) {
+        wiz.printf("Type: %[i]\n");
+        wiz.printf("Flags: %[b:w=8,p=0]\n"); # w = width (PF_VAR_UINT), p = padding char (PF_VAR_CHAR)
+        wiz.printf("Data: %[i]\n");
+    } else {
+        wiz.print("No type!\n");
+    }
+}
+
+int main(int argc, char$$ argv) {
+    struct(mystruct) test = {TYPE_NONE, BITFLAG_1 | BITFLAG_3, 123};
+    pstatus($test);
+    test = {TYPE_1, test.flags | BITFLAG_2, 456};
+    pstatus($test);
+    return 0;
+}

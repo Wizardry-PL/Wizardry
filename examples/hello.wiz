@@ -1,3 +1,4 @@
+# Hello World
 @include <wizardry>
 
 int main(int argc, char$$ argv) {
