@@ -1,0 +1,29 @@
+@include <wizardry>
+
+dynamic void myfunc() {
+    wiz.print("test text\n");
+}
+
+int main(int argc, char$$ argv) {
+    myfunc();
+    wiz.dynlib lib;
+    func new_myfunc;
+    defer {
+        wiz.freesym(lib, "myfunc");
+        wiz.freelib(lib);
+    }
+    if (argc >= 2) {
+        int error;
+        if ((lib = wiz.loadlib(argv[1], 0, $error)) == NULL) {
+            wiz.printf("Failed to load library '%[s]': %[s].\n", argv[1], wiz.errstr(error));
+            return 1;
+        }
+        if ((new_myfunc = wiz.getsym(lib, "myfunc", $error)) == NULL) {
+            wiz.printf("Failed to load symbol '%[s]' from library '%[s]': %[s].\n", "myfunc", argv[1], wiz.errstr(error));
+            return 1;
+        }
+        myfunc = new_myfunc;
+    }
+    myfunc();
+    return 0;
+} 
