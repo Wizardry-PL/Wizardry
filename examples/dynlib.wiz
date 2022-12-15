@@ -6,7 +6,7 @@ dynamic void myfunc() {
 
 int main(int argc, char$$ argv) {
     myfunc();
-    wiz.dynlib lib;
+    wiz.dynlib$ lib;
     func new_myfunc;
     defer {
         wiz.freesym(lib, "myfunc");
